@@ -8,7 +8,7 @@ public class DataPersistenceManager : MonoBehaviour
 {
     [Header("file storage Config")]
     [SerializeField] private string[] fileNames = new string[3] { "SaveData1.game", "SaveData2.game", "SaveData3.game"};
-    [SerializeField] public static int FileToUse;
+    [SerializeField] public static int FileToUse = 0;
 
     private GameData gameData;
 
@@ -20,15 +20,16 @@ public class DataPersistenceManager : MonoBehaviour
     private void Awake()
     {
         if (Instance == null) { Instance = this; }else { Debug.LogError("ther is more then one Data Persistence manger in scene"); }
-    }
-    private void Start()
-    {
         for (int i = 0; i < 3; i++)
         {
             dataHandler[i] = new FileDataHandler(Application.persistentDataPath, fileNames[i]);
-           
+
         }
         dataPersistencesObjects = FindAllDataPersistenceObjects();
+    }
+    private void Start()
+    {
+        
     }
 
     public void NewGame() 

@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 public enum Types
 {
-    Raw_materials,
+    Raw_Materials,
     Vehicles,
     Materials,
     Organics,
@@ -13,6 +13,7 @@ public enum Types
 public static class DoucementsData
 {
     public static Dictionary<Types, string[]> TypesData;
+    public static Dictionary<Types, int> TypesCode;
 
     private static string[]
     #region data
@@ -37,7 +38,7 @@ public static class DoucementsData
        
         TypesData = new Dictionary<Types, string[]>()
         {
-          {Types.Raw_materials, Raw_materials },
+          {Types.Raw_Materials, Raw_materials },
           {Types.Materials,     Materials     },
           {Types.Organics,      Organics      },
           {Types.Medicals,      Medicals      },
@@ -46,5 +47,18 @@ public static class DoucementsData
         };
         return TypesData;
     }
+    public static Dictionary<Types, int> TypeCode()
+    {
 
+        TypesCode = new Dictionary<Types, int>()
+        {
+          {Types.Raw_Materials, 23001      },
+          {Types.Materials,     22994      },
+          {Types.Organics,      11990      },
+          {Types.Medicals,      21301      },
+          {Types.Vehicles,      14034      },
+          {Types.Electronics,   17341      }
+        };
+        return TypesCode;
+    }
 }

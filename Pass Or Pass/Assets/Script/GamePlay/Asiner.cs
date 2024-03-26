@@ -4,12 +4,30 @@ using UnityEngine;
 using TMPro;
 using System;
 using AYellowpaper.SerializedCollections;
-using Unity.VisualScripting;
+using System.Diagnostics.Tracing;
+using UnityEditor.Rendering;
 
 [System.Serializable]
-public class Days { [SerializedDictionary("Type", "Amount")] public AYellowpaper.SerializedCollections.SerializedDictionary<Types, int> DoucementsBearDay; }
+public class Days {
+   
+    [SerializedDictionary("Type", "Amount")] public AYellowpaper.SerializedCollections.SerializedDictionary<Types, List<DilogeFeald>> DoucementsBearDay; 
+}
 
+[System.Serializable]
+public class Pearson 
+{
+    public PagerTemplate DoamintInfo;
 
+    public Speatch Speatch;
+
+    public int DayCorrectPapers = 0;
+
+    public Pearson(PagerTemplate doamintInfo, Speatch speatch)
+    {
+        DoamintInfo = doamintInfo;
+        Speatch = speatch;
+    }
+}
 
 public class Asiner : MonoBehaviour, IDataPersistence
     {
@@ -17,7 +35,7 @@ public class Asiner : MonoBehaviour, IDataPersistence
     [SerializedDictionary("Type", "Stamp" )]
     public AYellowpaper.SerializedCollections.SerializedDictionary<Types, Sprite> Stmps;
 
-    
+    [HideInInspector] public static Pearson CurintClint;
 
    [SerializeField]
    public List<Days> Day;
@@ -25,87 +43,169 @@ public class Asiner : MonoBehaviour, IDataPersistence
     public TMP_Text
             DateMain,
             DateSecnd,
-            Type,
+            TypeMain,
+            TypeSecand,
             KeyCode, //keycodes are set from 1 to 9, 1 to 4 import, 5 to 7 export , 8 and 9 transite
-            AboutMain,
-            AboutSecnd,
+            TypeKode, //in doucementsData
+            TypeType,
             OwnerName,
+            OwnerNameSecand,
             SenderName,
-            WhightMain,
-            WhightSecnd;
+            Whight,
+            AllowedWhight,
+            Amount,
+            AmountSecand,
+            AllowedAmount,
+            price,
+            FrromWhere,
+            TOWhere,
+            CostCul,
+            CostFinal,
+            Moany,
+            Date;
+
 
         public SpriteRenderer 
         StampMain,
-        StampSend;
+        StampLogo;
 
 
         public Sprite 
         Abrove, 
-        Denay;
+        Denay,
+        empty;
 
-    private int day = 0;
+    private int day = 0 , moany;
+    [HideInInspector] public int curectPapers;
 
+    [HideInInspector] public int SelectedItems;
+
+    public Dictionary<Types, int> Bribes = new Dictionary<Types, int>();
     
-    private List<PagerTemplate> Templates = new List<PagerTemplate>();
+    [SerializeField] 
+    public List<Pearson> Templates = new List<Pearson>();
+   
+
 
     private int[] date;
 
+    public static Asiner Instince;
    
-
-    private void Awake()
+    private void Start()
     {
-        DataPersistenceManager.Instance.LoadGame();
-
        
+        DataPersistenceManager.Instance.LoadGame();
+        Moany.text = "Chash: " + moany;
+        if (Instince == null)
+            Instince = this;
+        if (Day.Count - 1 >= day)
+        {
             foreach (var item1 in Day[day].DoucementsBearDay)
             {
-                MakeData(item1.Value,item1.Key, 5 - day);
+                MakeData(item1.Value.Count, item1.Key, item1.Value);
+
             }
-        
-        
+
+        }
+        else
+        {
+            day = 0;
+            foreach (var item1 in Day[day].DoucementsBearDay)
+            {
+                MakeData(item1.Value.Count, item1.Key, item1.Value);
+
+            }
+
+        }
+
+
+
+    }
+    public void NextCharecter() 
+    {
+        var v = ChoseData(ref Templates);
+        if (v != null)
+        {
+            AsineText(v);
+        }
+        else
+        {
+            CustomersMovement.instance.phoneEnabled = false;
+            EndGame();
+        }
+    }
+    public void UpdateMony(int Add)
+    {
+        moany += Add;
+        Moany.text = "Chash: " + moany;
     }
 
-        private void MakeData(int NumToMake, Types type, int ChanceForUncorrectFealid)
-        {
-           
+    public void EndGame() 
+    {
+        StopAllCoroutines();
+        DataHolder.Bribes = Bribes;
+        DataPersistenceManager.Instance.SaveGame();
+        loadscenes.instance.loadenextscene("DayResult");
+        Debug.Log("Go to the result sean"); }
 
+
+        private void MakeData(int NumToMake, Types type, List<DilogeFeald> diloges)
+        {
+
+
+           int MaxUncorrectFeilds = UnityEngine.Random.Range(7 - day > 0 ? (7 - day) : 1, 10 - day > 0 ? (10 - day) : 2) ;
+
+           int FalssCount  = UnityEngine.Random.Range(NumToMake/3,2 * NumToMake/3);
+           int bridcount = FalssCount / UnityEngine.Random.Range(2, 3);
+           int FalsMade = 0;
 
           for (int i = 0; i < NumToMake; i++)
           {
              PagerTemplate template = new PagerTemplate();
+             DilogeFeald diloge = diloges[i];
+            
 
             #region initiate data;
 
-
+            template.isCoreact = true;
             string[] temp;
             Dictionary<Types, string[]> TypesData = DoucementsData.TypeData();
+            
+            Dictionary<Types, int> TypesCode = DoucementsData.TypeCode();
+
+            
+
             TypesData.TryGetValue(type, out temp);
             int num = UnityEngine.Random.Range(0, temp.Length);
 
             template.Type = type.ToString();
+            
             template.TypeScandery = type.ToString();
 
+            TypesCode.TryGetValue(type, out template.TypeCode);
+
             template.OwnerName = DoucementsData.Names[UnityEngine.Random.Range(0, DoucementsData.Names.Length)];
+            template.OwnerNameSecand = template.OwnerName;
 
             template.SenderName = DoucementsData.Names[UnityEngine.Random.Range(0, DoucementsData.Names.Length)];
 
-            template.Date[0] = UnityEngine.Random.Range(2011, date[0]);
+            template.Date[0] = date[0];
 
             template.Date[1] = UnityEngine.Random.Range(1, date[1]);
 
             template.Date[2] = UnityEngine.Random.Range(1, date[2]);
 
-            template.Date[0] = UnityEngine.Random.Range(date[0], 2030);
+            template.ExpDate[0] = UnityEngine.Random.Range(date[0] + 1, 2030);
 
-            template.ExpDate[1] = UnityEngine.Random.Range(date[1], 12);
+            template.ExpDate[1] = UnityEngine.Random.Range(date[1] , 12);
 
-            template.Date[2] = UnityEngine.Random.Range(date[2], 28);
+            template.ExpDate[2] = UnityEngine.Random.Range(date[2] +1, 28);
 
             template.AboutMain = temp[num];
 
 
             #region Wight, Price and Amount
-            if (type == Types.Raw_materials)
+            if (type == Types.Raw_Materials)
             {
                 template.Amount = UnityEngine.Random.Range(25, 50);
                 template.Weight = UnityEngine.Random.Range(100, 200) * template.Amount;
@@ -190,15 +290,17 @@ public class Asiner : MonoBehaviour, IDataPersistence
             allareCoreacte = new PagerTemplate();
             allareCoreacte.CopyData(template);
 
-            template.isCoreact = UnityEngine.Random.Range(0, 10) < 3;
-
-             if (template.isCoreact == false)
+           
+            //make data Wrong
+             if (i < FalssCount)
              {
+                FalsMade++;
                 int safenet = 0;
-               
+                template.isCoreact = false;
+
                 System.Random random = new System.Random();
                 do {
-                    for (int z = 0; z < ChanceForUncorrectFealid; z++)
+                    for (int z = 0; z < MaxUncorrectFeilds; z++)
                     {
                        
                         int RandomChance = UnityEngine.Random.Range(0, 14);
@@ -207,10 +309,11 @@ public class Asiner : MonoBehaviour, IDataPersistence
 
                             case 0:
 
-                                
-                               
-                                template.TypeScandery = ((Types)random.Next(Enum.GetValues(typeof(Types)).Length)).ToString();
 
+                                do
+                                {
+                                    template.TypeScandery = ((Types)random.Next(Enum.GetValues(typeof(Types)).Length)).ToString();
+                                } while (template.TypeScandery.Equals(allareCoreacte.Type) && safenet < 10);
                                 break;
 
                             case 1:
@@ -219,8 +322,8 @@ public class Asiner : MonoBehaviour, IDataPersistence
                                     
                                     safenet++;
                                     Types RandomType = ((Types)random.Next(Enum.GetValues(typeof(Types)).Length));
-                                    Stmps.TryGetValue(RandomType, out template.Stamp);
-                                } while (template.Stamp.Equals(allareCoreacte.Stamp) && safenet < 10);
+                                    Stmps.TryGetValue(RandomType, out template.SacnderStamp);
+                                } while (template.SacnderStamp.Equals(allareCoreacte.Stamp) && safenet < 10);
                                
                                 break;
 
@@ -228,33 +331,33 @@ public class Asiner : MonoBehaviour, IDataPersistence
                                 do
                                 {
                                     safenet++;
-                                    template.OwnerName = DoucementsData.Names[UnityEngine.Random.Range(0, DoucementsData.Names.Length)];
+                                    template.OwnerNameSecand = DoucementsData.Names[UnityEngine.Random.Range(0, DoucementsData.Names.Length)];
                                 }
-                                while (allareCoreacte.OwnerName.Equals(template.OwnerName) && safenet < 10);
+                                while (allareCoreacte.OwnerName.Equals(template.OwnerNameSecand) && safenet < 10);
                                 break;
 
                             case 3:
-                                template.Date[0] = UnityEngine.Random.Range(2011, date[0] + 1);
+                                template.Date[0] = UnityEngine.Random.Range(date[0] + 1,2015);
                                 break;
 
                             case 4:
-                                template.Date[1] = UnityEngine.Random.Range(1, date[1] + 1);
+                                template.Date[1] = UnityEngine.Random.Range(date[1] , 12);
                                 break;
 
                             case 5:
-                                template.Date[2] = UnityEngine.Random.Range(1, date[2] + 1);
+                                template.Date[2] = UnityEngine.Random.Range(date[2] + 1, 28);
                                 break;
 
                             case 6:
-                                template.ExpDate[0] = UnityEngine.Random.Range(date[0] + 1, 2030);
+                                template.ExpDate[0] = UnityEngine.Random.Range(date[0] - 10, date[0] - 1);
                                 break;
 
                             case 7:
-                                template.ExpDate[1] = UnityEngine.Random.Range(date[1] + 1, 12);
+                                template.ExpDate[1] = UnityEngine.Random.Range(1, date[1] - 1);
                                 break;
 
                             case 8:
-                                template.ExpDate[2] = UnityEngine.Random.Range(date[2] + 1, 28);
+                                template.ExpDate[2] = UnityEngine.Random.Range(1, date[2] - 1);
                                 break;
 
                             case 9:
@@ -317,35 +420,103 @@ public class Asiner : MonoBehaviour, IDataPersistence
                     Debug.Log("Infint Loob Didected");
                 
              }
-            
-            Templates.Add(template);
+            if (template.isCoreact == false && FalsMade > bridcount)
+            {
+                template.TackBribe = true;
+            }
+            else
+            {
+                template.TackBribe = false;
+            }
+           
+            Pearson p = new Pearson(template, diloge.Person.GetValueOrDefault(template.isCoreact == false ? DilogeType.Brib : DilogeType.Normail));
+            Templates.Add(p);
            }
 
         }
-    
-        private PagerTemplate ChoseData(ref List<PagerTemplate> templates)
+
+
+    private PagerTemplate ChoseData(ref List<Pearson> templates)
+    {
+        if (templates.Count > 0)
         {
-        int Ran = UnityEngine.Random.Range(0,templates.Count);
+            int Ran = UnityEngine.Random.Range(0, templates.Count);
 
-        PagerTemplate chosean = templates[Ran];
+            if (templates[Ran] != null)
+            {
+                PagerTemplate chosean = templates[Ran].DoamintInfo;
+                CurintClint = templates[Ran];
+                templates.Remove(templates[Ran]);
 
-        templates.Remove(chosean);
-
-
-        return chosean; 
+                return chosean;
+            }
+            else
+                return null;
+        }
+        else
+        {
+            return null;
         }
 
-        private void AsineData(PagerTemplate template)
+    }
+        private void AsineText(PagerTemplate template)
         {
-        // add the logic to asin the data for the shosin template
-         
-        }
+
+        DateMain.text = template.Date[0] + " / " + template.Date[1] + " / " + template.Date[2] ;
+
+        DateSecnd.text = template.ExpDate[0] + " / " + template.ExpDate[1] + " / " + template.ExpDate[2];
+
+        TypeMain.text = template.Type;
+
+        TypeSecand.text = template.TypeScandery;
+
+        KeyCode.text = template.keyCod.ToString();
+
+        TypeKode.text = template.TypeCode.ToString();
+
+        TypeType.text = template.AboutMain;
+
+        OwnerName.text = template.OwnerName;
+
+        OwnerNameSecand.text = template.OwnerNameSecand;
+
+        SenderName.text = template.SenderName;
+
+        Whight.text = template.Weight + " Kg";
+
+        AllowedWhight.text = template.AlowedWhight + " Kg";
+
+        Amount.text = template.Amount.ToString();
+
+        AmountSecand.text = template.Amount.ToString();
+
+        AllowedAmount.text = template.AlowedAmont.ToString();
+
+        price.text = template.Price.ToString();
+
+        FrromWhere.text = template.From;
+
+        TOWhere.text = template.To;
+
+        CostCul.text = template.Price +" x " + template.Amount + "\n =";
+
+        CostFinal.text = template.Cost + " JD";
+
+        StampLogo.sprite = template.Stamp;
+
+
+
+        Debug.Log("Iscprecte = " + template.isCoreact + " Tack Bribe = " + template.TackBribe);
+
+
+    }
    
+
     private bool ComperData(PagerTemplate a, PagerTemplate b)
     {
         
         bool isSame = false;
-        if (a.ExpDate.Equals( b.ExpDate )&& a.Date.Equals(b.Date) && a.Amount.Equals(b.Amount) && a.Weight.Equals(b.Weight) && a.From.Equals(b.From) && a.To.Equals(b.To) && a.keyCod.Equals(b.keyCod) && a.OwnerName.Equals(b.OwnerName) && a.Stamp.Equals(b.Stamp) && a.TypeScandery.Equals(b.TypeScandery))
+        if ( a.ExpDate.Equals( b.ExpDate )&& a.Date.Equals(b.Date) && a.Amount.Equals(b.Amount) && a.Weight.Equals(b.Weight) && a.From.Equals(b.From) && a.To.Equals(b.To) && a.keyCod.Equals(b.keyCod) && a.OwnerName.Equals(b.OwnerNameSecand) && a.Stamp.Equals(b.SacnderStamp) && a.TypeScandery.Equals(b.TypeScandery) && a.TypeCode.Equals(b.TypeCode))
         {
              isSame = true;
         }
@@ -356,14 +527,44 @@ public class Asiner : MonoBehaviour, IDataPersistence
     #region lood and save
     public void LoadData(GameData data)
         {
+
+        SelectedItems = data.numOfSelected.Count;
+
             date = data.date;
+
             day = data.Day;
-        }
 
-        public void SaveData(ref GameData data)
+            moany = + data.Money;
+        Date.text ="Date: " + data.date[0] + " / " + data.date[1] + " / " + data.date[2];
+
+    }
+
+       public void SaveData(ref GameData data)
+       {
+        data.TockBribe = DilogeManger.isAcceptBribe;
+
+        data.Money = moany; 
+        
+        data.Day++;
+
+        data.WeeklyNotice += CustomersMovement.instance.dailyMistakesCount;
+
+        data.CurrectPaperForTheDay = curectPapers;
+
+        if (data.date[0]++ <= 28)
         {
-
+            data.date[0]++;
         }
+        else if (data.date[1]++ <= 12)
+        {
+            data.date[1]++;
+        }
+        else
+        {
+            data.date[2]++;
+        }
+
+       }
     #endregion
 
 }

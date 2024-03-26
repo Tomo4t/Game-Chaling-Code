@@ -7,13 +7,20 @@ using UnityEngine;
 [System.Serializable]
 public class PagerTemplate
 {
-    public  Sprite Stamp;
+    
+
+    public  Sprite 
+        Stamp,
+        SacnderStamp
+        ;
+
     public int[] Date = new int[3], ExpDate = new int[3];
 
     public string 
         Type,
         TypeScandery,
         OwnerName,
+        OwnerNameSecand,
         SenderName,
         AboutMain,
         AboutSecndery,
@@ -28,13 +35,18 @@ public class PagerTemplate
         Cost
         ;
 
-    public bool isCoreact;
+    public bool
+        isCoreact,
+        TackBribe = false
+        ;
 
     public int 
-        keyCod, 
+        keyCod,
+        TypeCode,
         Amount,
         AlowedAmont
         ;
+
     public void CopyData(PagerTemplate other)
     {
         // Copy all fields from 'other' to 'this'
@@ -61,6 +73,7 @@ public class PagerTemplate
         this.isCoreact = other.isCoreact;
 
         this.keyCod = other.keyCod;
+        this.TypeCode = other.TypeCode;
         this.Amount = other.Amount;
         this.AlowedAmont = other.AlowedAmont;
     }

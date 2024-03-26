@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using System.Linq;
+using Unity.VisualScripting;
 
 
 public class DataPersistenceManager : MonoBehaviour
@@ -19,13 +20,15 @@ public class DataPersistenceManager : MonoBehaviour
 
     private void Awake()
     {
-        if (Instance == null) { Instance = this; }else { Debug.LogError("ther is more then one Data Persistence manger in scene"); }
+        DontDestroyOnLoad(this);
+        if (Instance == null) { Instance = this; }else { Destroy(Instance.gameObject); Instance = this; }
         for (int i = 0; i < 3; i++)
         {
             dataHandler[i] = new FileDataHandler(Application.persistentDataPath, fileNames[i]);
 
         }
         dataPersistencesObjects = FindAllDataPersistenceObjects();
+       
     }
     private void Start()
     {
@@ -38,7 +41,8 @@ public class DataPersistenceManager : MonoBehaviour
     }
     public void LoadGame() 
     {
-        gameData = dataHandler[FileToUse].Load();
+        Debug.Log("LodingData");
+        gameData = dataHandler[PlayerPrefs.GetInt("File")].Load();
 
         if (gameData == null)
         {
@@ -57,7 +61,7 @@ public class DataPersistenceManager : MonoBehaviour
             dataPersistenceObj.SaveData(ref gameData);
         }
 
-        dataHandler[FileToUse].Save(gameData);
+        dataHandler[PlayerPrefs.GetInt("File")].Save(gameData);
     }
 
     private List<IDataPersistence> FindAllDataPersistenceObjects()

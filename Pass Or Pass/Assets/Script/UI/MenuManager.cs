@@ -10,7 +10,7 @@ public class MenuManager : MonoBehaviour, IDataPersistence
 {
     [SerializeField] private GameObject Active, CreateSaveFile,PlayPanel,SavesPanel;
    
-
+    private bool deleate = false;
     [SerializeField] private Button SaveButton1, SaveButton2, SaveButton3;
     [SerializeField] private TMP_InputField inputField;
     [SerializeField] private TMP_Text  _name, Money, Rank, Notice, date, id, gender, age;
@@ -33,6 +33,8 @@ public class MenuManager : MonoBehaviour, IDataPersistence
     }
     public void DeleatSave()
     {
+        deleate = true;
+        DataPersistenceManager.Instance.SaveGame();
         PlayerPrefs.SetInt("File" +   (DataPersistenceManager.FileToUse),0);
         if (DataPersistenceManager.FileToUse == 0) { SaveButton1.onClick.AddListener(Create); SaveButton1.onClick.RemoveListener(openPlay); SaveButton1.onClick.RemoveListener(LoadProfil);  }
 
@@ -49,6 +51,7 @@ public class MenuManager : MonoBehaviour, IDataPersistence
     public void Useflile(int filenum)
     {
         DataPersistenceManager.FileToUse = filenum;
+        PlayerPrefs.SetInt("File",filenum);
         DataPersistenceManager.Instance.LoadGame();
     }
     public void Create()
@@ -97,7 +100,11 @@ public class MenuManager : MonoBehaviour, IDataPersistence
         {
             data.Name = Gender.isOn ? "Steave" : "Alex";
         }
-        
+        if (deleate)
+        {
+            data = new GameData();
+            deleate = false;    
+        }
      
         
         data.isMale = Gender.isOn;

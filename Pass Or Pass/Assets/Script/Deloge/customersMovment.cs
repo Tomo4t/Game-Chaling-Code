@@ -98,7 +98,7 @@ public class CustomersMovement : MonoBehaviour
                                     {
                                         inRoom = true;
                                         StopAllCoroutines();
-                                        Asiner.Instince.NextCharecter();
+                                      
                                         WishAudioSors.Play();
                                         StartPopUp();
 
@@ -117,7 +117,7 @@ public class CustomersMovement : MonoBehaviour
                             float DeltaY = endPos.y - startPos.y;
 
                             Physics.Raycast(ray, out hit);
-                            if (hit.collider != null && hit.collider.CompareTag("paper") && CameraMovement.instance.Cam == CameraMovement.CurrentCam.First)
+                            if (hit.collider != null && hit.collider.CompareTag("paper") && CameraMovement.instance.Cam == CameraMovement.CurrentCam.First && TryToBribe == false)
                             {
 
                                 if (SealMovement.instance.approved.activeSelf || SealMovement.instance.denied.activeSelf)
@@ -215,6 +215,7 @@ public class CustomersMovement : MonoBehaviour
         {
 
             inRoom = false;
+            Debug.Log("Angry");
             DilogeManger.instance.LeveRome();
         }
 
@@ -227,7 +228,7 @@ public class CustomersMovement : MonoBehaviour
         spriteRenderer.sprite = sprite[Random.Range(0, sprite.Count - 1)];
         if (!isPoppingUp)
         {
-            Debug.Log("aaa");
+            
             isPoppingUp = true;
             StartCoroutine(PopUp());
         }
@@ -267,7 +268,7 @@ public class CustomersMovement : MonoBehaviour
 
     IEnumerator PopUp()
     {
-        Debug.Log("aazza");
+       
         float timer = 0f;
       
         while (isPoppingUp)
@@ -303,11 +304,10 @@ public class CustomersMovement : MonoBehaviour
         paper.transform.DOMove(endPosition, 0.5f).OnComplete(() =>
         {
             paper.SetActive(false);
-            SealMovement.instance.approved.SetActive(false);
-            SealMovement.instance.denied.SetActive(false);
+           
             WishAudioSors.Play();
             PopDown();
-            phoneEnabled = true;
+            
         });
     }
 }

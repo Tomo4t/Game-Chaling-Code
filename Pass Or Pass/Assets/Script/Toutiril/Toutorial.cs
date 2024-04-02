@@ -15,6 +15,7 @@ public class Toutorial : MonoBehaviour, IDataPersistence
 
     public GameObject Text1, Text2, Text3, Text4, Text5,Text6;
 
+    public string sceentolood = "MainRoom";
     public IEnumerator Start() 
     {
 
@@ -69,17 +70,18 @@ public class Toutorial : MonoBehaviour, IDataPersistence
         yield return new WaitUntil(() => Paaper);
         hand8.SetActive(false);
         Apaper.SetTrigger("1");
-       Acarecter.SetTrigger("1");
-        yield return new WaitForSeconds(1);
+        yield return new WaitForSeconds(0.5f);
+        Paper.SetActive(false);
+        Acarecter.SetTrigger("1");
+        yield return new WaitForSeconds(0.5f);
         hand9.SetActive(true);
-       
         hand9.SetActive(false);
         Clint.SetActive(false);
-        Paper.SetActive(false);
+       
 
         DataPersistenceManager.Instance.SaveGame();
 
-        loadscenes.instance.loadenextscene("MainRoom");
+        loadscenes.instance.loadenextscene(sceentolood);
 
     }
     public void BrestButten1() 

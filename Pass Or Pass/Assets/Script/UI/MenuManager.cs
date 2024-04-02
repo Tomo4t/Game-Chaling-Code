@@ -13,7 +13,7 @@ public class MenuManager : MonoBehaviour, IDataPersistence
     private bool deleate = false;
     [SerializeField] private Button SaveButton1, SaveButton2, SaveButton3;
     [SerializeField] private TMP_InputField inputField;
-    [SerializeField] private TMP_Text  _name, Money, Rank, Notice, date, id, gender, age;
+    [SerializeField] private TMP_Text  _name, Money, Day, Rank, Notice, date, id, gender, age;
     [SerializeField] private Toggle Gender;
 
     private void Start()
@@ -79,15 +79,16 @@ public class MenuManager : MonoBehaviour, IDataPersistence
 
     public void LoadData(GameData data) 
     {
-        age.text = "Age: " + data.Age.ToString();
+        age.text = data.Age.ToString();
         
-        date.text = "Date: "+ data.date[0].ToString()+ " / " + data.date[1].ToString()+" / " + data.date[2].ToString() + "     Day: " + data.Day.ToString();
-        gender.text = "Gender: " + (data.isMale ? "Male" : "Female");
-        _name.text = "Name: " + data.Name;
-        id.text = "ID: " + data.seed.ToString();
-        Money.text = "Current Balance: " + data.Money;
-        Notice.text = "WeeklyNotice: " + data.WeeklyNotice.ToString();
-        Rank.text = "Rank" + data.Rank.ToString();
+        date.text = data.date[0].ToString()+ " / " + data.date[1].ToString()+" / " + data.date[2].ToString();
+        Day.text = data.Day.ToString();
+        gender.text =(data.isMale ? "M" : "F");
+        _name.text = data.Name;
+        id.text = data.seed.ToString();
+        Money.text = data.Money.ToString();
+        Notice.text = data.WeeklyNotice.ToString();
+        Rank.text = data.Rank.ToString();
         
     }
     public void SaveData(ref GameData data) 

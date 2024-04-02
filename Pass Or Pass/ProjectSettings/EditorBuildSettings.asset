@@ -6,6 +6,9 @@ EditorBuildSettings:
   serializedVersion: 2
   m_Scenes:
   - enabled: 1
+    path: Assets/selectLanguage.unity
+    guid: 365493e6c40046447a347246e44cf726
+  - enabled: 1
     path: Assets/Scenes/MainMenu.unity
     guid: 9fc0d4010bbf28b4594072e72b8655ab
   - enabled: 1
@@ -20,4 +23,19 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/DayResult.unity
     guid: 86e7815b44d925c44b7317587f60012f
+  - enabled: 1
+    path: Assets/ScenesArabic/ArMainMenu.unity
+    guid: 77c84a933f057c346bbba04bd481bbec
+  - enabled: 1
+    path: Assets/ScenesArabic/ArMainRoom.unity
+    guid: 59625e61291f7ba48a1b43f0221e437d
+  - enabled: 1
+    path: Assets/ScenesArabic/ArToutorial.unity
+    guid: 20bc2db88a8d4674786254d3bdf1726c
+  - enabled: 1
+    path: Assets/ScenesArabic/ArOffice.unity
+    guid: b399c33437f89b04b910d55b4e343f1a
+  - enabled: 1
+    path: Assets/ScenesArabic/ArDayResult.unity
+    guid: b28d76b9b1fdcd14084b7e2327abccc4
   m_configObjects: {}

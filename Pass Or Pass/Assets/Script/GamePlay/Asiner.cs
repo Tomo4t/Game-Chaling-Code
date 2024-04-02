@@ -1,4 +1,4 @@
-
+﻿
 using System.Collections.Generic;
 using UnityEngine;
 using TMPro;
@@ -39,6 +39,8 @@ public class Asiner : MonoBehaviour, IDataPersistence
 
    [SerializeField]
    public List<Days> Day;
+
+    private int FalsMade = 0;
 
     public TMP_Text
             DateMain,
@@ -84,8 +86,8 @@ public class Asiner : MonoBehaviour, IDataPersistence
     
     [SerializeField] 
     public List<Pearson> Templates = new List<Pearson>();
-   
 
+    private string[] names, countres;
 
     private int[] date;
 
@@ -93,9 +95,11 @@ public class Asiner : MonoBehaviour, IDataPersistence
    
     private void Start()
     {
-       
+        names = PlayerPrefs.GetInt("Lung", 1) == 1 ? DoucementsData.Names : DoucementsData.arabicNames;
+        countres = PlayerPrefs.GetInt("Lung", 1) == 1 ? DoucementsData.countries : DoucementsData.arabiccountries;
         DataPersistenceManager.Instance.LoadGame();
-        Moany.text = "Chash: " + moany;
+        Moany.text = moany.ToString();
+        
         if (Instince == null)
             Instince = this;
         if (Day.Count - 1 >= day)
@@ -118,7 +122,7 @@ public class Asiner : MonoBehaviour, IDataPersistence
 
         }
 
-
+        NextCharecter();
 
     }
     public void NextCharecter() 
@@ -127,6 +131,7 @@ public class Asiner : MonoBehaviour, IDataPersistence
         if (v != null)
         {
             AsineText(v);
+            CustomersMovement.instance.phoneEnabled = true;
         }
         else
         {
@@ -137,7 +142,7 @@ public class Asiner : MonoBehaviour, IDataPersistence
     public void UpdateMony(int Add)
     {
         moany += Add;
-        Moany.text = "Chash: " + moany;
+        Moany.text = moany.ToString();
     }
 
     public void EndGame() 
@@ -145,7 +150,7 @@ public class Asiner : MonoBehaviour, IDataPersistence
         StopAllCoroutines();
         DataHolder.Bribes = Bribes;
         DataPersistenceManager.Instance.SaveGame();
-        loadscenes.instance.loadenextscene("DayResult");
+        loadscenes.instance.loadenextscene(PlayerPrefs.GetInt("Lung", 1) == 1 ? "DayResult": "ArDayResult");
         Debug.Log("Go to the result sean"); }
 
 
@@ -155,9 +160,9 @@ public class Asiner : MonoBehaviour, IDataPersistence
 
            int MaxUncorrectFeilds = UnityEngine.Random.Range(7 - day > 0 ? (7 - day) : 1, 10 - day > 0 ? (10 - day) : 2) ;
 
-           int FalssCount  = UnityEngine.Random.Range(NumToMake/3,2 * NumToMake/3);
+           int FalssCount  = UnityEngine.Random.Range(1, NumToMake);
            int bridcount = FalssCount / UnityEngine.Random.Range(2, 3);
-           int FalsMade = 0;
+           
 
           for (int i = 0; i < NumToMake; i++)
           {
@@ -184,10 +189,10 @@ public class Asiner : MonoBehaviour, IDataPersistence
 
             TypesCode.TryGetValue(type, out template.TypeCode);
 
-            template.OwnerName = DoucementsData.Names[UnityEngine.Random.Range(0, DoucementsData.Names.Length)];
+            template.OwnerName = names[UnityEngine.Random.Range(0, names.Length)];
             template.OwnerNameSecand = template.OwnerName;
 
-            template.SenderName = DoucementsData.Names[UnityEngine.Random.Range(0, DoucementsData.Names.Length)];
+            template.SenderName = names[UnityEngine.Random.Range(0, names.Length)];
 
             template.Date[0] = date[0];
 
@@ -257,14 +262,14 @@ public class Asiner : MonoBehaviour, IDataPersistence
             int chance = UnityEngine.Random.Range(1, 3);
             if (chance == 1)
             {
-                template.From = DoucementsData.countries[UnityEngine.Random.Range(0, DoucementsData.countries.Length)];
-                template.To = "Jordan";
+                template.From = countres[UnityEngine.Random.Range(0, countres.Length)];
+                template.To = PlayerPrefs.GetInt("Lung", 1) == 1 ? "Jordan" : "الأردن";
                 template.keyCod = UnityEngine.Random.Range(1, 4);
             }
             else if (chance == 2)
             {
-                template.From = "Jordan";
-                template.To = DoucementsData.countries[UnityEngine.Random.Range(0, DoucementsData.countries.Length)];
+                template.From = PlayerPrefs.GetInt("Lung", 1) == 1 ? "Jordan" : "الأردن";
+                template.To = countres[UnityEngine.Random.Range(0, countres.Length)];
                 template.keyCod = UnityEngine.Random.Range(5, 7);
             }
             else
@@ -273,8 +278,8 @@ public class Asiner : MonoBehaviour, IDataPersistence
                 do
                 {
                     safenet++;
-                    template.From = DoucementsData.countries[UnityEngine.Random.Range(0, DoucementsData.countries.Length)];
-                    template.To = DoucementsData.countries[UnityEngine.Random.Range(0, DoucementsData.countries.Length)];
+                    template.From = countres[UnityEngine.Random.Range(0, countres.Length)];
+                    template.To = countres[UnityEngine.Random.Range(0, countres.Length)];
                     template.keyCod = UnityEngine.Random.Range(8, 9);
                 }
                 while (template.From.Equals(template.To) && safenet<10);
@@ -331,7 +336,7 @@ public class Asiner : MonoBehaviour, IDataPersistence
                                 do
                                 {
                                     safenet++;
-                                    template.OwnerNameSecand = DoucementsData.Names[UnityEngine.Random.Range(0, DoucementsData.Names.Length)];
+                                    template.OwnerNameSecand = names[UnityEngine.Random.Range(0, names.Length)];
                                 }
                                 while (allareCoreacte.OwnerName.Equals(template.OwnerNameSecand) && safenet < 10);
                                 break;
@@ -380,14 +385,14 @@ public class Asiner : MonoBehaviour, IDataPersistence
                                 chance = UnityEngine.Random.Range(1,3);
                                 if (chance == 1)
                                 {
-                                    template.From = "Jordan";
-                                    template.To = DoucementsData.countries[UnityEngine.Random.Range(0, DoucementsData.countries.Length)];
+                                    template.From = PlayerPrefs.GetInt("Lung", 1) == 1 ? "Jordan" : "الأردن";
+                                    template.To = countres[UnityEngine.Random.Range(0, countres.Length)];
                                     template.keyCod = UnityEngine.Random.Range(1, 4);
                                 }
                                 else if (chance == 2)
                                 {
-                                    template.From = "Jordan";
-                                    template.To = DoucementsData.countries[UnityEngine.Random.Range(0, DoucementsData.countries.Length)];
+                                    template.From = PlayerPrefs.GetInt("Lung", 1) == 1 ? "Jordan": "الأردن";
+                                    template.To = countres[UnityEngine.Random.Range(0, countres.Length)];
                                     do {
                                         safenet++;
                                         template.keyCod = UnityEngine.Random.Range(1, 9);
@@ -399,8 +404,8 @@ public class Asiner : MonoBehaviour, IDataPersistence
                                 {
                                     do {
                                         safenet++;
-                                        template.From = DoucementsData.countries[UnityEngine.Random.Range(0, DoucementsData.countries.Length)];
-                                        template.To = DoucementsData.countries[UnityEngine.Random.Range(0, DoucementsData.countries.Length)];
+                                        template.From = countres[UnityEngine.Random.Range(0, countres.Length)];
+                                        template.To = countres[UnityEngine.Random.Range(0, countres.Length)];
                                         template.keyCod = UnityEngine.Random.Range(1, 7);
                                        }
                                     while (template.From.Equals(template.To) && safenet < 20);
@@ -534,8 +539,8 @@ public class Asiner : MonoBehaviour, IDataPersistence
 
             day = data.Day;
 
-            moany = + data.Money;
-        Date.text ="Date: " + data.date[0] + " / " + data.date[1] + " / " + data.date[2];
+            moany = data.Money;
+        Date.text = data.date[0] + " / " + data.date[1] + " / " + data.date[2];
 
     }
 
@@ -551,9 +556,9 @@ public class Asiner : MonoBehaviour, IDataPersistence
 
         data.CurrectPaperForTheDay = curectPapers;
 
-        if (data.date[0]++ <= 28)
+        if (data.date[2]++ <= 28)
         {
-            data.date[0]++;
+            data.date[2]++;
         }
         else if (data.date[1]++ <= 12)
         {
@@ -561,7 +566,7 @@ public class Asiner : MonoBehaviour, IDataPersistence
         }
         else
         {
-            data.date[2]++;
+            data.date[0]++;
         }
 
        }

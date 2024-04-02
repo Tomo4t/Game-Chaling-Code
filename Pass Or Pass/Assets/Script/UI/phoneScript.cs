@@ -158,6 +158,7 @@ public class phoneScript : MonoBehaviour,IDataPersistence
 
     public void SaveData(ref GameData data)
     {
-        data.Money = Coins;
+        data.CurrectPaperForTheDay = 0;
+        data.Money = Coins + (earnings * 20);
     }
 }

@@ -147,7 +147,7 @@ public class SealMovement : MonoBehaviour
             denied.SetActive(false);
             GreanSeal.transform.DOMove(startGreen.position, 0.5f).OnComplete(() =>
             {
-                CustomersMovement.instance.MovePaperToCharacter();
+                
             });
         });
     }

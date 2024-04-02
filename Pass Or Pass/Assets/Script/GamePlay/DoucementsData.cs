@@ -1,4 +1,4 @@
-
+﻿
 using System.Collections.Generic;
 
 public enum Types
@@ -27,8 +27,43 @@ public static class DoucementsData
     
     public static string[]
     #region data
-
-      Names = { "John Smith", "Michael Johnson", "William Brown", "David Davis", "James Miller", "Robert Wilson", "Joseph Moore", "Richard Taylor", "Daniel Anderson", "Matthew Thomas", "Christopher Martinez", "Andrew Jackson", "Brian Harris", "Edward Thompson", "Kevin White", "Mark Martin", "George Garcia", "Steven Robinson", "Thomas Rodriguez", "Charles Lewis", "Timothy Lee", "Jason Hall", "Jeffrey Young", "Ryan King", "Nicholas Scott", "Eric Baker", "Adam Cooper", "Paul Hill", "Scott Turner", "Justin Nelson", "Kenneth Reed", "Brian Wright", "Anthony Evans", "Jonathan Murphy", "Derek Rivera", "Brandon Carter", "Gary Perez", "Peter Stewart", "Nathan Phillips", "Walter Foster", "Samuel Ward", "Craig Butler", "Bryan Simmons", "Donald Foster", "Raymond Hayes", "Alexander Barnes", "Benjamin Mitchell", "Patrick Powell", "Larry Jenkins" },
+        arabiccountries = { "جنوب أفريقيا", "نيجيريا", "كينيا", "المغرب", "إثيوبيا", "غانا", "تنزانيا", "أوغندا", "الجزائر", "زيمبابوي", "بوتسوانا", "مالي", "السنغال", "ساحل العاج", "الكاميرون", "أنغولا", "رواندا", "بوروندي", "مالاوي", "ناميبيا", "موريشيوس", "سيشيل", "توغو", "ليسوتو", "السودان", "جنوب السودان", "ليبيا", "تونس", "مصر", "سيراليون", "ليبيريا", "غينيا", "بنين", "النيجر", "تشاد", "بوركينا فاسو", "جيبوتي", "جزر القمر", "إريتريا", "الصومال", "مدغشقر", "زامبيا", "سوازيلاند", "موزمبيق", "الكونغو", "الغابون", "الرأس الأخضر" },
+        arabicNames = {
+    "أحمد محمد",
+            "سامر أحمد",
+            "علي خالد",
+            "لينا عبدالله",
+            "نورا محمود",
+            "يوسف عمر",
+            "سارة محمد",
+            "فاطمة علي",
+            "محمد عبدالرحمن",
+            "عائشة حسن",
+            "محمد إبراهيم",
+            "لمى عبدالعزيز",
+            "مريم علي",
+            "محمود أمين",
+            "لطيفة حسين",
+            "حسام عبدالله",
+            "داليا مصطفى",
+            "أسماء علي",
+            "عبدالله نور",
+            "صابرينا محمد",
+            "أنور جمال",
+            "ريماس عبدالوهاب",
+            "فاديا حمدي",
+            "زينب عبدالله",
+            "رامي محمود",
+            "هديل عبدالرحمن",
+            "أحمد عباس",
+            "سلمى محمد",
+            "عمران سعيد",
+            "ليلى جمال",
+            "عبدالرحمن عبدالرحمن",
+            "سهيلة أحمد"
+        // Add more names as needed
+    },
+    Names = { "John Smith", "Michael Johnson", "William Brown", "David Davis", "James Miller", "Robert Wilson", "Joseph Moore", "Richard Taylor", "Daniel Anderson", "Matthew Thomas", "Christopher Martinez", "Andrew Jackson", "Brian Harris", "Edward Thompson", "Kevin White", "Mark Martin", "George Garcia", "Steven Robinson", "Thomas Rodriguez", "Charles Lewis", "Timothy Lee", "Jason Hall", "Jeffrey Young", "Ryan King", "Nicholas Scott", "Eric Baker", "Adam Cooper", "Paul Hill", "Scott Turner", "Justin Nelson", "Kenneth Reed", "Brian Wright", "Anthony Evans", "Jonathan Murphy", "Derek Rivera", "Brandon Carter", "Gary Perez", "Peter Stewart", "Nathan Phillips", "Walter Foster", "Samuel Ward", "Craig Butler", "Bryan Simmons", "Donald Foster", "Raymond Hayes", "Alexander Barnes", "Benjamin Mitchell", "Patrick Powell", "Larry Jenkins" },
       countries = { "South Africa", "Nigeria", "Kenya", "Morocco", "Ethiopia", "Ghana", "Tanzania", "Uganda", "Algeria", "Zimbabwe", "Botswana", "Mali", "Senegal", "Ivory Coast", "Cameroon", "Angola", "Rwanda", "Burundi", "Malawi", "Namibia", "Mauritius", "Seychelles", "Togo", "Lesotho", "Sudan", "South Sudan", "Libya", "Tunisia", "Egypt", "Sierra Leone", "Liberia", "Guinea", "Benin", "Niger", "Chad", "Burkina Faso", "Djibouti", "Comoros", "Eritrea", "Somalia", "Madagascar", "Zambia", "Swaziland", "Mozambique", "Congo", "Gabon", "Cape Verde" };
       
     #endregion
